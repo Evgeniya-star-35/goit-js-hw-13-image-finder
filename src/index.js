@@ -6,26 +6,36 @@ import { error } from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css';
 import '@pnotify/desktop/dist/PNotifyDesktop';
 import '@pnotify/core/dist/BrightTheme.css';
+var debounce = require('lodash.debounce');
 
-refs.searchInput.addEventListener('input', onSearchImages);
+refs.searchInput.addEventListener('input', debounce(onSearchImages, 500));
 refs.btn.addEventListener('click', onLoadMore);
 
-let inputValue = '';
 const newsApiService = new NewsApiService();
 function onSearchImages(e) {
   e.preventDefault();
-  const inputValue = e.currentTarget.elements.query.value;
-  newsApiService.fetchImages(inputValue);
+
+  newsApiService.query = e.target.value;
+  newsApiService.resetPage();
+  newsApiService
+    .fetchImages()
+    .then(hits => {
+      clearImgGallery();
+      renderImgCard(hits);
+    })
+    .catch(onFetchError);
   // searchImages(inputValue).then(renderImgCard).catch(onFetchError);
 }
-function renderImgCard(img) {
-  const markup = markupImgTPL(img);
-  console.log(markup);
-  refs.gallery.innerHTML = markup;
+function renderImgCard(hits) {
+  const markup = markupImgTPL(hits);
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
 }
 function onFetchError(Error) {
   console.log(Error);
 }
 function onLoadMore() {
-  newsApiService.fetchImages(inputValue);
+  newsApiService.fetchImages().then(renderImgCard);
+}
+function clearImgGallery() {
+  refs.gallery.innerHTML = '';
 }
