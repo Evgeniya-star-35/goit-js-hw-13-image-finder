@@ -26,10 +26,12 @@
     "sass": "^1.32.8"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@pnotify/core": "^5.2.0",
     "@pnotify/desktop": "^5.2.0",
+    "@pnotify/font-awesome5": "^5.2.0",
+    "@pnotify/font-awesome5-fix": "^5.2.0",
     "basiclightbox": "^5.0.4",
-    "lodash.debounce": "^4.0.8",
     "material-icons": "^1.1.1"
   }
 }
