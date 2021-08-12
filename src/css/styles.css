@@ -84,3 +84,7 @@ img {
 .photo-card {
   display: inline-block;
 }
+.material-icons {
+  color: #ffffff;
+  font-size: 24px;
+}

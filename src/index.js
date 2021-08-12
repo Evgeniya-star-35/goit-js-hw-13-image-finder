@@ -8,6 +8,7 @@ import '@pnotify/desktop/dist/PNotifyDesktop';
 import '@pnotify/core/dist/BrightTheme.css';
 var debounce = require('lodash.debounce');
 import 'material-icons/iconfont/material-icons.css';
+const basicLightbox = require('basiclightbox');
 
 const newsApiService = new NewsApiService();
 const loadMoreBtn = new LoadMoreBtn({
