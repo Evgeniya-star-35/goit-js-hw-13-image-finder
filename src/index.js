@@ -1,5 +1,6 @@
 import NewsApiService from './js/apiService';
 import refs from './js/refs';
+console.log(refs);
 import markupImgTPL from './templates/markup-card.hbs';
 import LoadMoreBtn from './js/loadMoreBtn';
 
@@ -14,7 +15,13 @@ import LoadMoreBtn from './js/loadMoreBtn';
 // defaults.width = '230px';
 import 'material-icons/iconfont/material-icons.css';
 // const basicLightbox = require('basiclightbox');
-// import * as basicLightbox from 'basiclightbox';
+import * as basicLightbox from 'basiclightbox';
+// const instance = basicLightbox.create(`
+//     <img  src="{{largeImageURL}}"  width="800" height="600">
+// `);
+
+// instance.show();
+
 const newsApiService = new NewsApiService();
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
@@ -62,33 +69,47 @@ function clearImgGallery() {
   refs.searchForm.value = '';
 }
 
-const onOpenModalClick = e => {
+refs.gallery.addEventListener('click', onOpenModalClick);
+window.addEventListener('keydown', onClickEsc);
+window.addEventListener('click', onCloseModalClick);
+
+function onOpenModalClick(e) {
+  const target = e.target;
+  if (target.nodeName !== 'IMG') {
+    return;
+  }
   e.preventDefault();
 
-  if (e.target.nodeName === 'img') {
-    onModalImgRef(e.target.alt, e.target.dataset.source);
+  if (target.nodeName === 'IMG') {
+    refs.modal.classList.add('is-open');
+    console.log(refs.modal);
+    refs.modalImg.src = target.dataset.source;
+    refs.modalImg.alt = target.alt;
+    window.addEventListener('keydown', onClickEsc);
 
-    refs.modalRef.classList.add('is-open');
+    console.log(refs.modalImg);
   }
-};
-const onKeyboardClick = e => {
-  if (e.key === 'Escape') {
-    refs.modalRef.classList.remove('is-open');
-  }
-};
+}
+// const onKeyboardClick = e => {
+//   if (e.key === 'Escape') {
 
-const onCloseModalClick = e => {
-  if (e.target.localName !== 'img') {
-    refs.modalRef.classList.remove('is-open');
+function onCloseModalClick(e) {
+  if (e.target.localName !== 'IMG') {
+    refs.modal.classList.remove('is-open');
 
-    onModalImgRef('', '');
+    refs.modalImg.src = '';
+    refs.modalImg.alt = '';
+    window.removeEventListener('keydown', onClickEsc);
   }
-};
-function onModalImgRef(alt, src) {
-  refs.modalImgRef.alt = alt;
-  refs.modalImgRef.src = src;
+}
+function onClickEsc(e) {
+  const ESC_KEY_CODE = 'Escape';
+  if (e.code === ESC_KEY_CODE) {
+    refs.modal.classList.remove('is-open');
+  }
 }
 
-refs.gallery.addEventListener('click', onOpenModalClick);
-window.addEventListener('keyup', onKeyboardClick);
-window.addEventListener('click', onCloseModalClick);
+// function onModalImgRef(alt, src) {
+//   refs.modalImgRef.alt = alt;
+//   refs.modalImgRef.src = src;
+// }
