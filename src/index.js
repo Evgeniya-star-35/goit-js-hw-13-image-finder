@@ -1,23 +1,21 @@
 import NewsApiService from './js/apiService';
 import refs from './js/refs';
-console.log(refs);
+import { onOpenModalClick, onCloseModalClick, onClickEsc } from './js/modal';
 import markupImgTPL from './templates/markup-card.hbs';
 import LoadMoreBtn from './js/loadMoreBtn';
 
-// import { error } from '@pnotify/core';
-// import '@pnotify/core/dist/PNotify.css';
-// import '@pnotify/desktop/dist/PNotifyDesktop';
-// import '@pnotify/core/dist/BrightTheme.css';
-// import * as PNotifyFontAwesome5Fix from '@pnotify/font-awesome5-fix';
-// import * as PNotifyFontAwesome5 from '@pnotify/font-awesome5';
-// defaultModules.set(PNotifyFontAwesome5Fix, {});
-// defaultModules.set(PNotifyFontAwesome5, {});
-// defaults.width = '230px';
+import { Error } from '@pnotify/core';
+import { notice } from '@pnotify/core';
+import '@pnotify/core/dist/PNotify.css';
+import '@pnotify/desktop/dist/PNotifyDesktop';
+import '@pnotify/core/dist/BrightTheme.css';
+
 import 'material-icons/iconfont/material-icons.css';
-// const basicLightbox = require('basiclightbox');
+
 import * as basicLightbox from 'basiclightbox';
+
 // const instance = basicLightbox.create(`
-//     <img  src="{{largeImageURL}}"  width="800" height="600">
+//     <img src="" width="800" height="600">
 // `);
 
 // instance.show();
@@ -29,20 +27,26 @@ const loadMoreBtn = new LoadMoreBtn({
 });
 
 refs.searchForm.addEventListener('submit', onSearchImages);
-
 loadMoreBtn.refs.button.addEventListener('click', fetchImg);
 
 function onSearchImages(e) {
   e.preventDefault();
-  newsApiService.query = e.target.elements.query.value.trim();
+  const form = e.currentTarget;
+  newsApiService.query = form.elements.query.value;
 
   if (newsApiService.query === '') {
     return;
   }
+
   clearImgGallery();
+
   loadMoreBtn.show();
+
   newsApiService.resetPage();
+
   fetchImg();
+  pageScroll();
+  form.reset();
 }
 function renderImgCard(hits) {
   const markup = markupImgTPL(hits);
@@ -50,12 +54,15 @@ function renderImgCard(hits) {
 }
 function fetchImg() {
   loadMoreBtn.disable();
+  if (!newsApiService.query) {
+    onError();
+    return;
+  }
   newsApiService.fetchImages().then(hits => {
     renderImgCard(hits);
-    refs.gallery.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-    });
+    if (loadMoreBtn.refs.button.disabled) {
+      onNotice();
+    }
     loadMoreBtn.enable();
   });
   // .catch(onFetchError);
@@ -66,50 +73,60 @@ function fetchImg() {
 
 function clearImgGallery() {
   refs.gallery.innerHTML = '';
-  refs.searchForm.value = '';
 }
+function onNotice() {
+  notice({
+    title: `Loading... Please wait!`,
+    delay: 500,
+  });
+}
+function onError() {
+  Error({
+    title: `Something went wront. Please try again!`,
+    delay: 350,
+  });
+}
+const hiddenElement = document.querySelector('[data-action="load-more"]');
+const btn = document.querySelector('.search');
+
+function pageScroll() {
+  hiddenElement.scrollIntoView({
+    behavior: 'smooth',
+    block: 'end',
+  });
+}
+
+btn.addEventListener('click', pageScroll);
 
 refs.gallery.addEventListener('click', onOpenModalClick);
 window.addEventListener('keydown', onClickEsc);
 window.addEventListener('click', onCloseModalClick);
 
-function onOpenModalClick(e) {
-  const target = e.target;
-  if (target.nodeName !== 'IMG') {
-    return;
-  }
-  e.preventDefault();
+// function onOpenModalClick(e) {
+//   e.preventDefault();
+//   const target = e.target;
+//   if (target.nodeName !== 'IMG') {
+//     return;
+//   }
 
-  if (target.nodeName === 'IMG') {
-    refs.modal.classList.add('is-open');
-    console.log(refs.modal);
-    refs.modalImg.src = target.dataset.source;
-    refs.modalImg.alt = target.alt;
-    window.addEventListener('keydown', onClickEsc);
+//   if (target.nodeName === 'IMG') {
+//     refs.modal.classList.add('is-open');
+//     refs.modalImg.src = target.dataset.source;
+//     refs.modalImg.alt = target.alt;
+//     window.addEventListener('keydown', onClickEsc);
+//   }
+// }
 
-    console.log(refs.modalImg);
-  }
-}
-// const onKeyboardClick = e => {
-//   if (e.key === 'Escape') {
+// function onCloseModalClick() {
+//   refs.modal.classList.remove('is-open');
+//   refs.modalImg.src = '';
+//   refs.modalImg.alt = '';
+//   window.removeEventListener('keydown', onClickEsc);
+// }
 
-function onCloseModalClick(e) {
-  if (e.target.localName !== 'IMG') {
-    refs.modal.classList.remove('is-open');
-
-    refs.modalImg.src = '';
-    refs.modalImg.alt = '';
-    window.removeEventListener('keydown', onClickEsc);
-  }
-}
-function onClickEsc(e) {
-  const ESC_KEY_CODE = 'Escape';
-  if (e.code === ESC_KEY_CODE) {
-    refs.modal.classList.remove('is-open');
-  }
-}
-
-// function onModalImgRef(alt, src) {
-//   refs.modalImgRef.alt = alt;
-//   refs.modalImgRef.src = src;
+// function onClickEsc(e) {
+//   const ESC_KEY_CODE = 'Escape';
+//   if (e.code === ESC_KEY_CODE) {
+//     refs.modal.classList.remove('is-open');
+//   }
 // }

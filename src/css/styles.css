@@ -172,7 +172,7 @@ img {
   transition: transform var(--animation-duration) var(--timing-function);
 }
 
-.lightbox.is-open .lightbox__content {
+.lightbox.is-open.lightbox__content {
   transform: scale(1);
 }
 /* .lightbox__button {
