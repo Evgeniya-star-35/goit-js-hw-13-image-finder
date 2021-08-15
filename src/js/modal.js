@@ -7,18 +7,17 @@ export function onOpenModalClick(e) {
     return;
   }
 
-  if (target.nodeName === 'IMG') {
-    refs.modal.classList.add('is-open');
-    refs.modalImg.src = target.dataset.source;
-    refs.modalImg.alt = target.alt;
-    window.addEventListener('keydown', onClickEsc);
-  }
+  refs.modal.classList.add('is-open');
+  refs.modalImg.src = target.dataset.source;
+  refs.modalImg.alt = target.alt;
+
+  window.addEventListener('keydown', onClickEsc);
 }
 
 export function onCloseModalClick() {
   refs.modal.classList.remove('is-open');
-  refs.modalImg.src = '';
-  refs.modalImg.alt = '';
+  refs.modalImg.src = '#';
+  refs.modalImg.alt = '#';
   window.removeEventListener('keydown', onClickEsc);
 }
 
@@ -28,3 +27,5 @@ export function onClickEsc(e) {
     refs.modal.classList.remove('is-open');
   }
 }
+refs.gallery.addEventListener('click', onOpenModalClick);
+refs.modal.addEventListener('click', onCloseModalClick);

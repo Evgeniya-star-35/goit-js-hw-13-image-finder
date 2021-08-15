@@ -86,47 +86,19 @@ function onError() {
     delay: 350,
   });
 }
-const hiddenElement = document.querySelector('[data-action="load-more"]');
-const btn = document.querySelector('.search');
 
-function pageScroll() {
-  hiddenElement.scrollIntoView({
-    behavior: 'smooth',
-    block: 'end',
-  });
-}
+// const btn = document.querySelector('.search');
 
-btn.addEventListener('click', pageScroll);
-
-refs.gallery.addEventListener('click', onOpenModalClick);
-window.addEventListener('keydown', onClickEsc);
-window.addEventListener('click', onCloseModalClick);
-
-// function onOpenModalClick(e) {
-//   e.preventDefault();
-//   const target = e.target;
-//   if (target.nodeName !== 'IMG') {
-//     return;
-//   }
-
-//   if (target.nodeName === 'IMG') {
-//     refs.modal.classList.add('is-open');
-//     refs.modalImg.src = target.dataset.source;
-//     refs.modalImg.alt = target.alt;
-//     window.addEventListener('keydown', onClickEsc);
-//   }
+// function pageScroll() {
+//   hiddenElement.scrollIntoView({
+//     behavior: 'smooth',
+//     block: 'end',
+//   });
 // }
 
-// function onCloseModalClick() {
-//   refs.modal.classList.remove('is-open');
-//   refs.modalImg.src = '';
-//   refs.modalImg.alt = '';
-//   window.removeEventListener('keydown', onClickEsc);
-// }
+// btn.addEventListener('click', pageScroll);
 
-// function onClickEsc(e) {
-//   const ESC_KEY_CODE = 'Escape';
-//   if (e.code === ESC_KEY_CODE) {
-//     refs.modal.classList.remove('is-open');
-//   }
-// }
+///////////////////////intersection observer
+const targetElement = document.querySelector('[data-action="load-more"]');
+const observer = new IntersectionObserver();
+observer.observe(targetElement);
