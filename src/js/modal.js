@@ -1,6 +1,6 @@
 import refs from './refs';
 
-function onOpenModalClick(e) {
+export function onOpenModalClick(e) {
   e.preventDefault();
 
   const target = e.target;
