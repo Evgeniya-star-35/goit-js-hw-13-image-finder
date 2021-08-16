@@ -31,6 +31,7 @@
     "@pnotify/desktop": "^5.2.0",
     "@pnotify/font-awesome5": "^5.2.0",
     "@pnotify/font-awesome5-fix": "^5.2.0",
+    "axios": "^0.21.1",
     "basiclightbox": "^5.0.4",
     "material-icons": "^1.1.1"
   }

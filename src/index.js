@@ -15,7 +15,7 @@ import 'material-icons/iconfont/material-icons.css';
 import * as basicLightbox from 'basiclightbox';
 
 // const instance = basicLightbox.create(`
-//     <img src="" width="800" height="600">
+//     <img src="e.target.dataset.source" width="800" height="600">
 // `);
 
 // instance.show();
@@ -41,11 +41,11 @@ function onSearchImages(e) {
   clearImgGallery();
 
   loadMoreBtn.show();
-
+  pageScroll();
   newsApiService.resetPage();
 
   fetchImg();
-  pageScroll();
+
   form.reset();
 }
 function renderImgCard(hits) {
@@ -87,18 +87,29 @@ function onError() {
   });
 }
 
-// const btn = document.querySelector('.search');
+function pageScroll() {
+  newsApiService.incrementPage();
+  newsApiService.returnData();
+  window.scrollTo({
+    top: refs.gallery.scrollHeight,
+    behavior: 'smooth',
+  });
+}
 
-// function pageScroll() {
-//   hiddenElement.scrollIntoView({
-//     behavior: 'smooth',
-//     block: 'end',
-//   });
-// }
-
-// btn.addEventListener('click', pageScroll);
+loadMoreBtn.refs.button.addEventListener('click', pageScroll);
 
 ///////////////////////intersection observer
-const targetElement = document.querySelector('[data-action="load-more"]');
-const observer = new IntersectionObserver();
-observer.observe(targetElement);
+// const targetElement = document.querySelector('.gallery');
+// const options = {
+//   rootMargin: '50px',
+//   threshold: 0.01,
+// };
+// function handelObserver(entries, observer) {
+//   entries.forEach(entry => {
+//     if (entry.isIntersecting) {
+//       console.log(entry);
+//     }
+//   });
+// }
+// const watcher = new IntersectionObserver(handelObserver, options);
+// watcher.observe(targetElement);
