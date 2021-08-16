@@ -1,7 +1,8 @@
-import refs from './refs.js';
+import refs from './refs';
 
-export function onOpenModalClick(e) {
+function onOpenModalClick(e) {
   e.preventDefault();
+
   const target = e.target;
   if (target.nodeName !== 'IMG') {
     return;
@@ -27,5 +28,6 @@ export function onClickEsc(e) {
     refs.modal.classList.remove('is-open');
   }
 }
+
 refs.gallery.addEventListener('click', onOpenModalClick);
 refs.modal.addEventListener('click', onCloseModalClick);

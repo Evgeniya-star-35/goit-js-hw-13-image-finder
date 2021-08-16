@@ -1,6 +1,5 @@
 import NewsApiService from './js/apiService';
 import refs from './js/refs';
-import { onOpenModalClick, onCloseModalClick, onClickEsc } from './js/modal';
 import markupImgTPL from './templates/markup-card.hbs';
 import LoadMoreBtn from './js/loadMoreBtn';
 
@@ -15,7 +14,7 @@ import 'material-icons/iconfont/material-icons.css';
 // import * as basicLightbox from 'basiclightbox';
 
 // const instance = basicLightbox.create(`
-//     <img src="e.target.dataset.source" width="800" height="600">
+//     <img src="${e.target.dataset.source}" width="800" height="600">
 // `);
 
 // instance.show();
@@ -41,11 +40,11 @@ function onSearchImages(e) {
   clearImgGallery();
 
   loadMoreBtn.show();
-  pageScroll();
+
   newsApiService.resetPage();
 
   fetchImg();
-
+  // pageScroll();
   form.reset();
 }
 function renderImgCard(hits) {
@@ -65,11 +64,8 @@ function fetchImg() {
     }
     loadMoreBtn.enable();
   });
-  // .catch(onFetchError);
+  // .catch(onError);
 }
-// function onFetchError(Error) {
-//   console.log(Error);
-// }
 
 function clearImgGallery() {
   refs.gallery.innerHTML = '';
@@ -80,36 +76,15 @@ function onNotice() {
     delay: 500,
   });
 }
-function onError() {
-  Error({
-    title: `Something went wront. Please try again!`,
-    delay: 350,
-  });
+function onError(Error) {
+  Error;
 }
 
 function pageScroll() {
-  newsApiService.incrementPage();
-  newsApiService.returnData();
-  window.scrollTo({
-    top: refs.gallery.scrollHeight,
+  const element = document.querySelectorAll('.gallery-item');
+  console.log(element);
+  element.lastElementChild.scrollIntoView({
     behavior: 'smooth',
+    block: 'end',
   });
 }
-
-loadMoreBtn.refs.button.addEventListener('click', pageScroll);
-
-///////////////////////intersection observer
-// const targetElement = document.querySelector('.gallery');
-// const options = {
-//   rootMargin: '50px',
-//   threshold: 0.01,
-// };
-// function handelObserver(entries, observer) {
-//   entries.forEach(entry => {
-//     if (entry.isIntersecting) {
-//       console.log(entry);
-//     }
-//   });
-// }
-// const watcher = new IntersectionObserver(handelObserver, options);
-// watcher.observe(targetElement);
