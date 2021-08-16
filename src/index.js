@@ -12,7 +12,7 @@ import '@pnotify/core/dist/BrightTheme.css';
 
 import 'material-icons/iconfont/material-icons.css';
 
-import * as basicLightbox from 'basiclightbox';
+// import * as basicLightbox from 'basiclightbox';
 
 // const instance = basicLightbox.create(`
 //     <img src="e.target.dataset.source" width="800" height="600">
