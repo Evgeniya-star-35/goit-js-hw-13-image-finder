@@ -43,7 +43,7 @@ function onSearchImages(e) {
   newsApiService.query = form.elements.query.value;
 
   if (newsApiService.query === '') {
-    loadMoreBtn.disable();
+    loadMoreBtn.hide();
     error({
       text: 'Please enter something!',
       delay: 2000,
