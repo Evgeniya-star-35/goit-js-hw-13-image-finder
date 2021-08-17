@@ -65,11 +65,12 @@ function fetchImg() {
     onError();
     return;
   }
+
   newsApiService.fetchImages().then(hits => {
     renderImgCard(hits);
-    if (loadMoreBtn.refs.button.disabled) {
-      onNotice();
-    }
+    // if (loadMoreBtn.refs.button.disabled) {
+    //   onNotice();
+    // }
     loadMoreBtn.enable();
   });
   // .catch(onError);
@@ -88,11 +89,11 @@ function onError(Error) {
   Error;
 }
 
-function pageScroll() {
-  const element = document.querySelectorAll('.gallery-item');
-  console.log(element);
-  element.lastElementChild.scrollIntoView({
-    behavior: 'smooth',
-    block: 'end',
-  });
-}
+// function pageScroll() {
+//   const element = document.querySelectorAll('.gallery-item');
+//   console.log(element);
+//   element.lastElementChild.scrollIntoView({
+//     behavior: 'smooth',
+//     block: 'end',
+//   });
+// }

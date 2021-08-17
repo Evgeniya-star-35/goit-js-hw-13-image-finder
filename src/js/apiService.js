@@ -1,8 +1,3 @@
-import '@pnotify/core/dist/PNotify.css';
-import '@pnotify/desktop/dist/PNotifyDesktop';
-import '@pnotify/core/dist/BrightTheme.css';
-import { notice } from '@pnotify/core';
-
 const API_KEY = '22851319-26dce2435af98d9caa304e2ac';
 
 export default class NewsApiService {
@@ -14,7 +9,8 @@ export default class NewsApiService {
   fetchImages() {
     // console.log(this);
     const BASE_URL = `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`;
-    return fetch(BASE_URL)
+
+    fetch(BASE_URL)
       .then(response => response.json())
       .then(({ hits }) => {
         this.incrementPage();
