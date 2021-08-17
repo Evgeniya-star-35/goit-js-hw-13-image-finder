@@ -6,6 +6,6 @@ const refs = {
   buttonModal: document.querySelector('.lightbox__button'),
   arrowRightModal: document.querySelector('.lightbox__button--arrowRight'),
   arrowLeftModal: document.querySelector('.lightbox__button--arrowLeft'),
-  // overlayModal: document.querySelector('.lightbox__overlay'),
+  overlayModal: document.querySelector('.lightbox__overlay'),
 };
 export default refs;

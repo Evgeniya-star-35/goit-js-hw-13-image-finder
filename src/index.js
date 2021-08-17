@@ -1,31 +1,32 @@
 import NewsApiService from './js/apiService';
 import refs from './js/refs';
-import {
-  onOpenModalClick,
-  onCloseModalClick,
-  onClickEsc,
-  onClickArrowIconLeft,
-  onClickArrowIconRight,
-  onArrowKey,
-} from './js/modal';
+// import { onOpenModalClick } from './js/modal';
 import markupImgTPL from './templates/markup-card.hbs';
 import LoadMoreBtn from './js/loadMoreBtn';
 
-import { Error } from '@pnotify/core';
-import { notice } from '@pnotify/core';
-import '@pnotify/core/dist/PNotify.css';
-import '@pnotify/desktop/dist/PNotifyDesktop';
+import { error } from '@pnotify/core';
 import '@pnotify/core/dist/BrightTheme.css';
+import '@pnotify/core/dist/PNotify.css';
+import { notice } from '@pnotify/core';
 
 import 'material-icons/iconfont/material-icons.css';
 
-// import * as basicLightbox from 'basiclightbox';
+import * as basicLightbox from 'basiclightbox';
+import 'basiclightbox/dist/basicLightbox.min.css';
 
-// const instance = basicLightbox.create(`
-//     <img src="${e.target.dataset.source}" width="800" height="600">
-// `);
+function onGalleryElClick(e) {
+  e.preventDefault();
 
-// instance.show();
+  if (e.target.nodeName !== 'IMG') {
+    return;
+  }
+
+  const changeModalImage = `<img src=${e.target.dataset.source} alt="icon" />`;
+  const instance = basicLightbox.create(changeModalImage);
+
+  instance.show();
+}
+refs.gallery.addEventListener('click', onGalleryElClick);
 
 const newsApiService = new NewsApiService();
 const loadMoreBtn = new LoadMoreBtn({
@@ -42,17 +43,17 @@ function onSearchImages(e) {
   newsApiService.query = form.elements.query.value;
 
   if (newsApiService.query === '') {
-    return;
+    loadMoreBtn.disable();
+    error({
+      text: 'Please enter something!',
+      delay: 2000,
+    });
   }
-
   clearImgGallery();
 
   loadMoreBtn.show();
-
   newsApiService.resetPage();
-
   fetchImg();
-  // pageScroll();
   form.reset();
 }
 function renderImgCard(hits) {
@@ -66,16 +67,27 @@ function fetchImg() {
     return;
   }
 
-  newsApiService.fetchImages().then(hits => {
-    renderImgCard(hits);
-    // if (loadMoreBtn.refs.button.disabled) {
-    //   onNotice();
-    // }
-    loadMoreBtn.enable();
-  });
-  // .catch(onError);
-}
+  newsApiService
+    .fetchImages()
+    .then(hits => {
+      renderImgCard(hits);
 
+      scrollPage();
+      loadMoreBtn.enable();
+
+      if (hits.length === 0) {
+        loadMoreBtn.hide();
+        noFound();
+      }
+    })
+    .catch(onError);
+}
+function noFound() {
+  error({
+    text: 'No matches found. Please enter another query!',
+    delay: 2500,
+  });
+}
 function clearImgGallery() {
   refs.gallery.innerHTML = '';
 }
@@ -89,11 +101,16 @@ function onError(Error) {
   Error;
 }
 
-// function pageScroll() {
-//   const element = document.querySelectorAll('.gallery-item');
-//   console.log(element);
-//   element.lastElementChild.scrollIntoView({
-//     behavior: 'smooth',
-//     block: 'end',
-//   });
-// }
+function scrollPage() {
+  try {
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 1000);
+  } catch (error) {
+    console.log(error);
+  }
+}
