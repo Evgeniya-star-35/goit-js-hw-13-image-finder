@@ -29,5 +29,56 @@ export function onClickEsc(e) {
   }
 }
 
+const photoEl = document.querySelectorAll('.image');
+console.log(photoEl.length);
+export function onClickArrowIconLeft() {
+  for (let i = 0; i < photoEl.length; i += 1) {
+    if (photoEl[i].dataset.source === refs.modalImg.src) {
+      if (i === 0) {
+        return;
+      }
+      refs.modalImg.src = photoEl[i - 1].dataset.source;
+      refs.modalImg.alt = photoEl[i - 1].alt;
+      return;
+    }
+  }
+}
+export function onClickArrowIconRight() {
+  for (let i = 0; i < photoEl.length; i += 1) {
+    if (photoEl[i].dataset.source === refs.modalImg.src) {
+      if (i === photoEl.length - 1) {
+        return;
+      }
+      refs.modalImg.src = photoEl[i + 1].dataset.source;
+      refs.modalImg.alt = photoEl[i + 1].alt;
+      return;
+    }
+  }
+}
+export function onArrowKey(e) {
+  for (let i = 0; i < photoEl.length; i += 1) {
+    if (photoEl[i].dataset.source === refs.modalImg.src) {
+      if (e.code === 'ArrowLeft') {
+        if (i === 0) {
+          return;
+        }
+        refs.modalImg.src = photoEl[i - 1].dataset.source;
+        refs.modalImg.alt = photoEl[i - 1].alt;
+        return;
+      }
+      if (e.code === 'ArrowRight') {
+        if (i === photoEl.length - 1) {
+          return;
+        }
+        refs.modalImg.src = photoEl[i + 1].dataset.source;
+        refs.modalImg.alt = photoEl[i + 1].alt;
+        return;
+      }
+    }
+  }
+}
+refs.arrowRightModal.addEventListener('click', onClickArrowIconRight);
+refs.arrowLeftModal.addEventListener('click', onClickArrowIconLeft);
+window.addEventListener('keydown', onArrowKey);
 refs.gallery.addEventListener('click', onOpenModalClick);
 refs.modal.addEventListener('click', onCloseModalClick);

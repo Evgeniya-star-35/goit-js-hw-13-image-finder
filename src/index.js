@@ -1,6 +1,13 @@
 import NewsApiService from './js/apiService';
 import refs from './js/refs';
-import { onOpenModalClick, onCloseModalClick, onClickEsc } from './js/modal';
+import {
+  onOpenModalClick,
+  onCloseModalClick,
+  onClickEsc,
+  onClickArrowIconLeft,
+  onClickArrowIconRight,
+  onArrowKey,
+} from './js/modal';
 import markupImgTPL from './templates/markup-card.hbs';
 import LoadMoreBtn from './js/loadMoreBtn';
 
