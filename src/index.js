@@ -26,7 +26,6 @@ function onGalleryElClick(e) {
 
   instance.show();
 }
-refs.gallery.addEventListener('click', onGalleryElClick);
 
 const newsApiService = new NewsApiService();
 const loadMoreBtn = new LoadMoreBtn({
@@ -34,8 +33,9 @@ const loadMoreBtn = new LoadMoreBtn({
   hidden: true,
 });
 
+refs.gallery.addEventListener('click', onGalleryElClick);
 refs.searchForm.addEventListener('submit', onSearchImages);
-loadMoreBtn.refs.button.addEventListener('click', fetchImg);
+loadMoreBtn.refs.button.addEventListener('click', scrollPage);
 
 function onSearchImages(e) {
   e.preventDefault();
@@ -50,10 +50,10 @@ function onSearchImages(e) {
     });
   }
   clearImgGallery();
-
+  fetchImg();
   loadMoreBtn.show();
   newsApiService.resetPage();
-  fetchImg();
+
   form.reset();
 }
 function renderImgCard(hits) {
@@ -72,13 +72,13 @@ function fetchImg() {
     .then(hits => {
       renderImgCard(hits);
 
-      scrollPage();
       loadMoreBtn.enable();
 
       if (hits.length === 0) {
         loadMoreBtn.hide();
         noFound();
       }
+      onNotice();
     })
     .catch(onError);
 }
@@ -110,6 +110,7 @@ function scrollPage() {
         behavior: 'smooth',
       });
     }, 1000);
+    fetchImg();
   } catch (error) {
     console.log(error);
   }
