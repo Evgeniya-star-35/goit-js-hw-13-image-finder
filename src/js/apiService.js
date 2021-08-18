@@ -16,15 +16,18 @@ export default class NewsApiService {
     //     this.incrementPage();
     //     return hits;
     //   });
+    try {
+      const responseUrl = await fetch(
+        `${BASE_URL}/?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`,
+      );
 
-    const responseUrl = await fetch(
-      `${BASE_URL}/?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`,
-    );
+      const { hits } = await responseUrl.json();
+      this.incrementPage();
 
-    const { hits } = await responseUrl.json();
-    this.incrementPage();
-
-    return hits;
+      return hits;
+    } catch (error) {
+      console.log('Error!');
+    }
   }
 
   get query() {
