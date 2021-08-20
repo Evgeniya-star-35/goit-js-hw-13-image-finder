@@ -3,12 +3,10 @@ import refs from './js/refs';
 // import { onOpenModalClick } from './js/modal';
 import markupImgTPL from './templates/markup-card.hbs';
 import LoadMoreBtn from './js/loadMoreBtn';
-
+import { notice } from '@pnotify/core';
 import { error } from '@pnotify/core';
 import '@pnotify/core/dist/BrightTheme.css';
 import '@pnotify/core/dist/PNotify.css';
-import { notice } from '@pnotify/core';
-
 import 'material-icons/iconfont/material-icons.css';
 
 import * as basicLightbox from 'basiclightbox';
