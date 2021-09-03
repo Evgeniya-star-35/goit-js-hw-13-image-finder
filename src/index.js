@@ -23,6 +23,11 @@ function onGalleryElClick(e) {
   const instance = basicLightbox.create(changeModalImage);
 
   instance.show();
+  window.addEventListener('keydown', e => {
+    if (e.code === 'Escape') {
+      instance.close();
+    }
+  });
 }
 
 const newsApiService = new NewsApiService();
@@ -111,5 +116,26 @@ function scrollPage() {
     fetchImg();
   } catch (error) {
     console.log(error);
+  }
+}
+// scroll up
+window.addEventListener('scroll', trackScroll);
+refs.goTopBtn.addEventListener('click', backToTop);
+
+function trackScroll() {
+  var scrolled = window.pageYOffset;
+  var coords = document.documentElement.clientHeight;
+
+  if (scrolled > coords) {
+    refs.goTopBtn.classList.add('back_to_top-show');
+  }
+  if (scrolled < coords) {
+    refs.goTopBtn.classList.remove('back_to_top-show');
+  }
+}
+function backToTop() {
+  if (window.pageYOffset > 0) {
+    window.scrollBy(0, -80);
+    setTimeout(backToTop, 0);
   }
 }
